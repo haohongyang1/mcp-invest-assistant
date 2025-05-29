@@ -2,6 +2,7 @@
   "name": "mcp-invest-assistant",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "scripts": {
     "build": "tsc",
@@ -10,7 +11,18 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean"
   },
-  "keywords": [],
+  "keywords": [
+    "model-context-protocol",
+    "lixingren",
+    "mcp",
+    "invest",
+    "assistant",
+    "cursor",
+    "lxr",
+    "mcp-invest-assistant",
+    "mcp-invest-assistant-server",
+    "etf"
+  ],
   "author": "",
   "license": "ISC",
   "description": "MCP投资助手服务器",
@@ -28,5 +40,13 @@
     "nodemon": "^3.1.10",
     "rimraf": "^5.0.10",
     "typescript": "^5.3.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haohongyang1/mcp-invest-assistant"
+  },
+  "bugs": {
+    "url": "https://github.com/haohongyang1/mcp-invest-assistant/issues"
+  },
+  "homepage": "https://github.com/haohongyang1/mcp-invest-assistant"
 }
