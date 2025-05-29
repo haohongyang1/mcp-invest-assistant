@@ -1,5 +1,12 @@
+export interface IndexTemperatureParam {
+    marketCn: string;
+    stockCodes: string[];
+}
+
 export interface ETFInfomation {
-    stockCodes: string[]
+    stockCodes?: string[],
+    market: string,
+    token: string
 }
 
 export interface BaseRequestBody {
@@ -17,6 +24,12 @@ export interface BaseResponseData {
     launchDate: string;
     rebalancingFrequency: string;
     series: string;
+}
+
+export interface BaseResponseBody {
+    code: number;
+    message: string;
+    data: BaseResponseData[];
 }
 
 
