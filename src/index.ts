@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
 import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
 import logger from './utils/logger.js';
@@ -39,18 +41,25 @@ server.resource('allIndexData', 'data://all-index-data', async (uri) => ({
 
 
 async function startServer() {
-    // 拿到TOKEN信息
-    logger.info(`process.argv: ${process.argv}`);
-    // 注册所有工具
-    // registerSayHello(server);
-    registerGetIndexTemperature(server);
-
-    // 启动MCP服务器
-    const transport = new StdioServerTransport();
     try {
+        logger.info('Registering tools...');
+
+        // 注册所有工具
+        // registerSayHello(server);
+        registerGetIndexTemperature(server);
+        logger.info('Tools registered successfully');
+
+        // 启动MCP服务器
+        logger.info('Starting MCP server with StdioServerTransport...');
+        const transport = new StdioServerTransport();
+
         await server.connect(transport);
-    } catch (error) {
-        console.error('服务器启动失败:', error);
+        logger.info('MCP server connected successfully');
+    } catch (error: unknown) {
+        const err = error as Error;
+        logger.error(`MCP server startup failed: ${err.message}`);
+        logger.error(`Stack trace: ${err.stack}`);
+        console.error('服务器启动失败:', err);
         process.exit(1);
     }
 }

@@ -31,21 +31,34 @@ TODO 这里录制一个使用视频和投资视频
 ## 安装与配置
 ### 配置理杏仁token
 
-### NPX
+###  🔧 配置 MCP 客户端
+
+1. 安装 MCP 投资助手服务器
+
+```bash
+npm install -g mcp-invest-assistant
+```
+
+2. 配置 Claude 的 MCP 配置文件
 
 ```json
 {
   "mcpServers": {
     "mcp-invest-assistant": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-invest-assistant"
-      ]
+      "command": "mcp-invest-assistant",
+      "args": []
     }
   }
 }
-``
+```
+
+> **注意**: 请确保使用 `mcp-invest-assistant` 而非 `npx`。使用全局安装的包可以避免一些连接问题。
+
+3. 如果你仍然看到 `Connection closed` 错误，请尝试以下解决方案：
+
+   - 检查你的防火墙设置是否阻止了进程通信
+   - 尝试重启你的编辑器或 Claude 客户端
+   - 检查 `~/Documents/mymcpserver/mcp-invest-assistant/logs` 目录中的日志文件以获取更详细的错误信息
 
 
 ## 安装与调试

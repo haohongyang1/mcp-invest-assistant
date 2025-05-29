@@ -12,11 +12,21 @@ if (!fs.existsSync(LOGS_DIR)) {
 }
 const logger = winston.createLogger({
     level: 'info',
-    format: winston.format.json(),
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+    ),
     defaultMeta: {service: 'user-service'},
     transports: [
         new winston.transports.File({filename: path.join(LOGS_DIR, 'error.log'), level: 'error'}),
         new winston.transports.File({filename: path.join(LOGS_DIR, 'combined.log')}),
+        // Add console transport for development/debugging
+        new winston.transports.Console({
+            format: winston.format.combine(
+                winston.format.colorize(),
+                winston.format.simple()
+            )
+        })
     ],
 });
 
