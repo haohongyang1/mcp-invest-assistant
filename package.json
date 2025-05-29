@@ -4,6 +4,9 @@
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "bin": {
+    "mcp-invest-assistant": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
