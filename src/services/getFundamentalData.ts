@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import {ETFInfomation, FundamentalRequestBody, FundamentalResponseBody} from '../types/index.js';
 import {FUNDAMENTAL_MARKET_API} from '../config/index.js';
 import logger from "../utils/logger.js";
-import data from './fundamental.js';
+import data from './mockFundamental.js';
 
 /**
  * 获取指数基本面历史数据，包括A股、港股、美股

@@ -4,8 +4,10 @@ import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
 import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
 import logger from './utils/logger.js';
 import {registerGetIndexTemperature} from "./tools/getIndexTemperature.js";
+import {registerGetCompanyCandlestick} from "./tools/getCompanyCandlestick.js";
 
-import mockAllBaseInfo from './services/mockAllBaseInfo.js';
+import allBaseInfo from './resource/allBaseInfo.js';
+import allCompanyBaseInfo from './resource/allCompanyBaseInfo.js';
 
 // 创建MCP服务器
 const server = new McpServer({
@@ -36,9 +38,12 @@ const server = new McpServer({
 // const allIndexData = await getBaseData();
 
 server.resource('allIndexData', 'data://all-index-data', async (uri) => ({
-    contents: [{uri: uri.href, text: JSON.stringify(mockAllBaseInfo)}],
+    contents: [{uri: uri.href, text: JSON.stringify(allBaseInfo)}],
 }));
 
+server.resource('allCompanyData', 'data://all-company-data', async (uri) => ({
+    contents: [{uri: uri.href, text: JSON.stringify(allCompanyBaseInfo)}],
+}));
 
 async function startServer() {
     try {
@@ -47,6 +52,9 @@ async function startServer() {
         // 注册所有工具
         // registerSayHello(server);
         registerGetIndexTemperature(server);
+        registerGetCompanyCandlestick(server);
+
+
         logger.info('Tools registered successfully');
 
         // 启动MCP服务器

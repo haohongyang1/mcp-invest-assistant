@@ -1,4 +1,5 @@
 import {z} from "zod";
+import {get} from "lodash-es";
 import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
 import getFundamentalData from "../services/getFundamentalData.js";
 import logger from "../utils/logger.js";
@@ -17,9 +18,7 @@ export function registerGetIndexTemperature(server: McpServer) {
             'stockCodes': z.array(z.string()).describe('指数代码数组，必传，数组长度大于0，格式如下：["000016"]')
         },
         async ({stockCodes, marketCn}: IndexTemperatureParam) => {
-            // 直接从 process.env 读取环境变量
             const token = process.env.TOKEN || '';
-            logger.info(`获取到的TOKEN: ${token}`);
 
             logger.info(`marketCn: ${marketCn}`);
 
@@ -54,34 +53,63 @@ export function registerGetIndexTemperature(server: McpServer) {
                 }
             }
 
-
-            const batchPromise = await Promise.all(
-                stockCodes.map((stockCode) => getFundamentalData({stockCodes: [stockCode], market: MARKET[marketCn], token}))
-            );
-            const fundamentalDataList = batchPromise.map((res: FundamentalResponseBody) => res.data);
-            const heatList = fundamentalDataList.map((fundamentalData) => {
-                const peList = fundamentalData.map((item) => item['pe_ttm.mcw']);
-                const pbList = fundamentalData.map((item) => item['pb.mcw']);
-                const pePercentRank = percentRank(peList, fundamentalData[0]['pe_ttm.mcw']);
-                const pbPercentRank = percentRank(pbList, fundamentalData[0]['pb.mcw']);
-                const percentHeat = (pePercentRank + pbPercentRank) / 2;
-                const temperature = (percentHeat * 100).toFixed(2);
-                return {code: fundamentalData[0].stockCode, temperature};
-            });
-
-            logger.info(`get heatList detail: ${JSON.stringify(heatList)}`);
-
-            const temperature = heatList.map((item) => `${item.code}的指数温度是${item.temperature}`).join('，');
-            logger.info(`response info temperature: ${temperature}`);
+            try {
+                const batchPromise = await Promise.all(
+                    stockCodes.map((stockCode) => getFundamentalData({stockCodes: [stockCode], market: MARKET[marketCn], token}))
+                );
+                const fundamentalDataList = batchPromise.map((res: FundamentalResponseBody) => res.data);
+                logger.info(`fundamentalDataList: ${JSON.stringify(fundamentalDataList)}`);
 
 
-            return {
-                content: [
-                    {
-                        type: "text",
-                        text: temperature
+                const heatList = fundamentalDataList.map((fundamentalData, index) => {
+                    if (fundamentalData.length === 0) {
+                        return {
+                            code: stockCodes[index],
+                            temperature: '',
+                            error: '获取基本面数据失败，可能原因：提供的股票代码非指数，或该指数在理杏仁网站拿不到数据，可提issue'
+                        };
                     }
-                ]
+
+                    const peList = fundamentalData.map((item) => item['pe_ttm.mcw']);
+                    const pbList = fundamentalData.map((item) => item['pb.mcw']);
+                    const pePercentRank = percentRank(peList, get(fundamentalData, '0.pe_ttm.mcw', 0));
+                    const pbPercentRank = percentRank(pbList, get(fundamentalData, '0.pb.mcw', 0));
+                    const percentHeat = (pePercentRank + pbPercentRank) / 2;
+                    const temperature = (percentHeat * 100).toFixed(2);
+                    return {code: get(fundamentalData, '0.stockCode', ''), temperature, error: ''};
+                });
+
+                logger.info(`get heatList detail: ${JSON.stringify(heatList)}`);
+
+                const temperature = heatList.map((item) => {
+                    const {code, error, temperature} = item;
+                    if (error) {
+                        return `${code}获取报错：${error}`;
+                    }
+                    return `${code}的指数温度是${temperature}`;
+                }).join('，');
+                logger.info(`response info temperature: ${temperature}`);
+
+
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: temperature
+                        }
+                    ]
+                }
+
+            } catch (e: any) {
+                logger.info(`[getIndexTemperature]Error: ${e.message || '未知错误'}`);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: "获取指数温度失败"
+                        }
+                    ]
+                }
             }
         }
     );

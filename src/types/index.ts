@@ -2,12 +2,31 @@ export interface IndexTemperatureParam {
     marketCn: string;
     stockCodes: string[];
 }
+export interface CompanyCandlestickParam {
+    startDate: string;
+    endDate: string;
+    marketCn: string;
+    // type: string;
+    stockCode: string;
+}
+
+export interface CompanyBaseInfo {
+    marketCn: string;
+    data: {
+        name: string;
+        stockCode: string;
+        fsTableType: string;
+    }[]
+}
+
+export type AllCompanyBaseInfo = CompanyBaseInfo[]
 
 export interface ETFInfomation {
     stockCodes?: string[],
     market: string,
     token: string
 }
+
 
 export interface BaseRequestBody {
     token: string;
@@ -54,3 +73,35 @@ export interface FundamentalResponseBody {
 }
 
 
+export interface CandidateInfomation {
+    token: string;
+    stockCode: string;
+    market: string;
+    // type: string;
+    startDate: string;
+    endDate: string;
+}
+export interface CandidateRequestBody {
+    token: string;
+    stockCode: string;
+    type: string;
+    startDate: string;
+    endDate: string;
+}
+
+export interface CandidateResponseData {
+    date: string;
+    open: number;
+    close: number;
+    high: number;
+    low: number;
+    volume: number;
+    amount: number;
+    change: number;
+    to_r: number;
+}
+export interface CandidateResponseBody {
+    code: number;
+    message: string;
+    data: CandidateResponseData[];
+}
