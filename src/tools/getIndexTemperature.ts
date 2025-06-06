@@ -1,7 +1,7 @@
 import {z} from "zod";
 import {get} from "lodash-es";
 import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
-import getFundamentalData from "../services/getFundamentalData.js";
+import getIndexFundamentalData from "../services/getIndexFundamentalData.js";
 import logger from "../utils/logger.js";
 import {FundamentalResponseBody, IndexTemperatureParam} from "../types/index.js";
 import percentRank from '../utils/percentRank.js';
@@ -55,7 +55,7 @@ export function registerGetIndexTemperature(server: McpServer) {
 
             try {
                 const batchPromise = await Promise.all(
-                    stockCodes.map((stockCode) => getFundamentalData({stockCodes: [stockCode], market: MARKET[marketCn], token}))
+                    stockCodes.map((stockCode) => getIndexFundamentalData({stockCodes: [stockCode], market: MARKET[marketCn], token}))
                 );
                 const fundamentalDataList = batchPromise.map((res: FundamentalResponseBody) => res.data);
                 logger.info(`fundamentalDataList: ${JSON.stringify(fundamentalDataList)}`);

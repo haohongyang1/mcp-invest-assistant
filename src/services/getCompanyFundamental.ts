@@ -1,35 +1,29 @@
 import axios from "axios";
-import dayjs from 'dayjs';
-import {ETFInfomation, FundamentalRequestBody, FundamentalResponseBody} from '../types/index.js';
-import {FUNDAMENTAL_MARKET_API} from '../config/index.js';
+import {FundamentalRequestBody, FundamentalInfomation, CandidateResponseBody} from '../types/index.js';
+import {COMPANY_FUNDAMENTAL_MARKET_API} from '../config/index.js';
 import logger from "../utils/logger.js";
-import data from './mockFundamental.js';
 
 /**
- * 获取指数基本面历史数据，包括A股、港股、美股
+ * 获取基本面数据，如PE、PB等
  */
-const getFundamentalData = ({stockCodes, market, token}: ETFInfomation): Promise<FundamentalResponseBody> => {
+const getFundamentalData = ({stockCodes, market, startDate, endDate, token, fsTableType}: FundamentalInfomation): Promise<CandidateResponseBody> => {
     return new Promise((resolve) => {
-        const fetchUri = FUNDAMENTAL_MARKET_API[market];
-        const bodyData: FundamentalRequestBody = {
-            token,
-            stockCodes,
-            metricsList: [
-                "pe_ttm.mcw",
-                "pb.mcw"
-            ]
-        }
-
-        // 设置时间范围：从10年前到现在
-        const endDate = dayjs().format('YYYY-MM-DD');
-        const startDate = dayjs().subtract(10, 'year').format('YYYY-MM-DD');
-        bodyData.startDate = startDate;
-        bodyData.endDate = endDate;
+        const fetchUri = `${COMPANY_FUNDAMENTAL_MARKET_API[market]}/${fsTableType}`;
 
         try {
+            // resolve(data);
+            // return;
+
+            const bodyData: FundamentalRequestBody = {
+                token,
+                stockCodes,
+                startDate,
+                endDate,
+            }
+
             logger.info(`[getFundamentalData]请求地址：${fetchUri}`);
             logger.info(`[getFundamentalData]参数：${JSON.stringify(bodyData)}`);
-            // resolve(data);
+
 
             axios.post(fetchUri, bodyData)
                 .then(res => {
@@ -50,7 +44,8 @@ const getFundamentalData = ({stockCodes, market, token}: ETFInfomation): Promise
                     });
                 });
         } catch (err) {
-            logger.info(`[getFundamentalData]Error: ${err}`);
+            const errorMessage = err instanceof Error ? err.message : '未知错误';
+            logger.info(`[getFundamentalData]Error: ${errorMessage}`);
             resolve({
                 code: 0,
                 message: '请求失败',
