@@ -1,10 +1,7 @@
 import axios from "axios";
-import dayjs from 'dayjs';
 import {CandidateRequestBody, CandidateInfomation, CandidateResponseBody} from '../types/index.js';
 import {COMPANY_MARKET_API} from '../config/index.js';
 import logger from "../utils/logger.js";
-import data from './mockCandlestick.js';
-import allCompanyBaseInfo from '../resource/allCompanyBaseInfo.js';
 
 /**
  * 获取某只股票K线数据（日线、近三年）

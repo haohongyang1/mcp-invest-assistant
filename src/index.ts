@@ -5,6 +5,7 @@ import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
 import logger from './utils/logger.js';
 import {registerGetIndexTemperature} from "./tools/getIndexTemperature.js";
 import {registerGetCompanyCandlestick} from "./tools/getCompanyCandlestick.js";
+import {registerGetCompanyFundamental} from "./tools/getCompanyFundamental.js";
 
 import allBaseInfo from './resource/allBaseInfo.js';
 import allCompanyBaseInfo from './resource/allCompanyBaseInfo.js';
@@ -51,8 +52,21 @@ async function startServer() {
 
         // 注册所有工具
         // registerSayHello(server);
+        // 指数温度计算
         registerGetIndexTemperature(server);
+        // 公司K线数据
         registerGetCompanyCandlestick(server);
+        // 公司基本面数据
+        registerGetCompanyFundamental(server);
+        // 公司财务报表
+        // 公司股东人数 & 大股东高管增减持
+        // 资金流向
+
+        // 经营数据 & 营收构成
+        // 股权质押 & 大宗交易
+        // 行业 & 指数信息
+        // 龙虎榜数据
+        // 公告&监管信息
 
 
         logger.info('Tools registered successfully');
