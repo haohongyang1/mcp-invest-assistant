@@ -1,12 +1,17 @@
 {
   "name": "mcp-invest-assistant",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "MCP投资助手服务器",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "mcp-invest-assistant": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",

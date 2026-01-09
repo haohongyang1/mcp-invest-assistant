@@ -69,7 +69,7 @@ npm install -g mcp-invest-assistant
    - 检查 `~/Documents/mymcpserver/mcp-invest-assistant/logs` 目录中的日志文件以获取更详细的错误信息
 
 
-## 安装与调试
+## 开发与调试
 
 ### 前置条件
 
@@ -89,15 +89,29 @@ cd mcp-invest-assistant
 npm install
 ```
 
-3. 构建项目
+3. 调试项目
 ```bash
 npm run build
 ```
-
-4. 启动服务
-```bash
-
+找一个Host配置好MCP
+```json
+{
+    "mcpServers": {
+        "mcp-invest-assistant": {
+          // 参考这个，应该是你的路径
+            "args": [
+                "/Users/haohongyang/Documents/mymcpserver/mcp-invest-assistant"
+            ],
+            "command": "node",
+            "disabled": false,
+            "env": {
+                "TOKEN": "95f5c7f5-3a20-436e-a411-011dc2eff608"
+            }
+        }
+    }
+}
 ```
+
 
 ## 项目结构
 
