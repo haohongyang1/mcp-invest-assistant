@@ -26,6 +26,11 @@ export const COMPANY_API = {
     CN_COMPANY_FUNDAMENTAL: 'https://open.lixinger.com/api/cn/company/fundamental',
     // 港股 基本面数据【注意使用时后面需拼接fsTableType】： https://www.lixinger.com/open/api/doc?api-key=hk/company/fundamental/reit
     HK_COMPANY_FUNDAMENTAL: 'https://open.lixinger.com/api/hk/company/fundamental',
+
+    // A股 财务报表数据【注意使用时后面需拼接fsTableType】： https://www.lixinger.com/open/api/doc?api-key=cn/company/fs/non_financial
+    CN_COMPANY_FINANCIAL_STATEMENT: 'https://open.lixinger.com/api/cn/company/fs',
+    // 港股 财务报表数据【注意使用时后面需拼接fsTableType】： https://www.lixinger.com/open/api/doc?api-key=hk/company/fs/non_financial
+    HK_COMPANY_FINANCIAL_STATEMENT: 'https://open.lixinger.com/api/hk/company/fs',
 }
 
 export const MARKET: Record<string, string> = {
@@ -54,6 +59,11 @@ export const COMPANY_MARKET_API: Record<string, string> = {
 export const COMPANY_FUNDAMENTAL_MARKET_API: Record<string, string> = {
     [MARKET['A股']]: COMPANY_API.CN_COMPANY_FUNDAMENTAL,
     [MARKET['港股']]: COMPANY_API.HK_COMPANY_FUNDAMENTAL,
+}
+
+export const COMPANY_FINANCIAL_STATEMENT_MARKET_API: Record<string, string> = {
+    [MARKET['A股']]: COMPANY_API.CN_COMPANY_FINANCIAL_STATEMENT,
+    [MARKET['港股']]: COMPANY_API.HK_COMPANY_FINANCIAL_STATEMENT,
 }
 
 // fsTableType 公司类型 

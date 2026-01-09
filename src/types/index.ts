@@ -17,6 +17,15 @@ export interface CompanyFundamentalParam {
     fsTableType: string;
 }
 
+export interface CompanyFinancialStatementParam {
+    startDate: string;
+    endDate: string;
+    marketCn: string;
+    stockCode: string;
+    fsTableType: string;
+    metricsList: string[];
+}
+
 export interface CompanyBaseInfo {
     marketCn: string;
     data: {
@@ -128,4 +137,32 @@ export interface CandidateResponseBody {
     code: number;
     message: string;
     data: CandidateResponseData[];
+}
+
+export interface FinancialStatementInformation {
+    token: string;
+    fsTableType: string;
+    stockCodes: string[];
+    market: string;
+    startDate: string;
+    endDate: string;
+    metricsList: string[];
+}
+
+export interface FinancialStatementRequestBody {
+    token: string;
+    stockCodes: string[];
+    startDate: string;
+    endDate?: string;
+    metricsList: string[];
+}
+
+export interface FinancialStatementResponseData {
+    [key: string]: string | number;
+}
+
+export interface FinancialStatementResponseBody {
+    code: number;
+    message: string;
+    data: FinancialStatementResponseData[];
 }

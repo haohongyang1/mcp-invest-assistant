@@ -12,7 +12,7 @@ import {MARKET} from '../config/index.js';
 export function registerGetIndexTemperature(server: McpServer) {
     server.tool(
         'mcp_get_index_temperature',
-        '定投指数ETF买入卖出时机参考，获取最新指数温度，指数温度越高，说明股市越火爆，风险越大，上涨空间越小。温度越低，说明股市越冷清，风险则越小，上涨空间更大。温度在0-10度之间，代表着股票市场正值寒冬、萎靡不振，这是时候是最佳的买入时机。10-20°之间，代表股票市场开始回暖，蓄势待发，仍然是买入良机。20-30°之间，股票市场欣欣向荣，可以继续买入。30-40℃之间，可以继续持有，提防风险。40-50℃之间，考虑逐步卖出。＞90℃，随时有灰飞烟灭的风险',
+        '定投指数ETF买入卖出时机参考，获取最新指数温度，指数温度越高，说明股市越火爆，风险越大，上涨空间越小。温度越低，说明股市越冷清，风险则越小，上涨空间更大。温度在0-10度之间，代表着股票市场正值寒冬、萎靡不振，这是时候是最佳的买入时机。10-20°之间，代表股票市场开始回暖，蓄势待发，仍然是买入良机。20-30°之间，股票市场欣欣向荣，可以继续买入。30-40℃之间，可以继续持有，提防风险。40-50℃之间，考虑逐步卖出。＞90℃，随时有灰飞烟灭的风险。-100表示获取失败',
         {
             'marketCn': z.string().describe(`市场，必传，可选值：${Object.keys(MARKET).join('、')}`),
             'stockCodes': z.array(z.string()).describe('指数代码数组，必传，数组长度大于0，格式如下：["000016"]')
@@ -60,7 +60,6 @@ export function registerGetIndexTemperature(server: McpServer) {
                 const fundamentalDataList = batchPromise.map((res: FundamentalResponseBody) => res.data);
                 logger.info(`fundamentalDataList: ${JSON.stringify(fundamentalDataList)}`);
 
-
                 const heatList = fundamentalDataList.map((fundamentalData, index) => {
                     if (fundamentalData.length === 0) {
                         return {
@@ -70,13 +69,33 @@ export function registerGetIndexTemperature(server: McpServer) {
                         };
                     }
 
+                    // 第一步：获取当前最新数据（数组第一个元素）
+                    const currentData = fundamentalData[0];
+                    const currentPE = currentData['pe_ttm.mcw'];
+                    const currentPB = currentData['pb.mcw'];
+                    const stockCode = currentData['stockCode'];
+
+                    // 第二步：提取历史 PE 和 PB 数据（近 5-10 年）
                     const peList = fundamentalData.map((item) => item['pe_ttm.mcw']);
                     const pbList = fundamentalData.map((item) => item['pb.mcw']);
-                    const pePercentRank = percentRank(peList, get(fundamentalData, '0.pe_ttm.mcw', 0));
-                    const pbPercentRank = percentRank(pbList, get(fundamentalData, '0.pb.mcw', 0));
-                    const percentHeat = (pePercentRank + pbPercentRank) / 2;
-                    const temperature = (percentHeat * 100).toFixed(2);
-                    return {code: get(fundamentalData, '0.stockCode', ''), temperature, error: ''};
+
+                    // 第三步：计算 PE 百分位
+                    // 公式：(当前PE排名 - 1) / (总数据量 - 1) * 100%
+                    const pePercentile = percentRank(peList, currentPE);
+
+                    // 第四步：计算 PB 百分位
+                    // 公式：(当前PB排名 - 1) / (总数据量 - 1) * 100%
+                    const pbPercentile = percentRank(pbList, currentPB);
+
+                    // 第五步：合并计算温度（双指标平均法）
+                    // 温度 = (PE百分位 + PB百分位) / 2
+                    const temperature = ((pePercentile + pbPercentile) / 2).toFixed(2);
+
+                    return {
+                        code: stockCode,
+                        temperature,
+                        error: ''
+                    };
                 });
 
                 logger.info(`get heatList detail: ${JSON.stringify(heatList)}`);

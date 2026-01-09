@@ -88,12 +88,7 @@ npm run build
 
 4. 启动服务
 ```bash
-npm start
-```
 
-开发模式启动（支持热重载）：
-```bash
-npm run dev
 ```
 
 ## 项目结构
