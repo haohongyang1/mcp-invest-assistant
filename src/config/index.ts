@@ -31,6 +31,14 @@ export const COMPANY_API = {
     CN_COMPANY_FINANCIAL_STATEMENT: 'https://open.lixinger.com/api/cn/company/fs',
     // 港股 财务报表数据【注意使用时后面需拼接fsTableType】： https://www.lixinger.com/open/api/doc?api-key=hk/company/fs/non_financial
     HK_COMPANY_FINANCIAL_STATEMENT: 'https://open.lixinger.com/api/hk/company/fs',
+
+    // A股 互联互通： https://www.lixinger.com/open/api/doc?api-key=cn/company/mutual-market
+    CN_COMPANY_MUTUAL_MARKET: 'https://open.lixinger.com/api/cn/company/mutual-market',
+    // 港股 互联互通： https://www.lixinger.com/open/api/doc?api-key=hk/company/mutual-market
+    HK_COMPANY_MUTUAL_MARKET: 'https://open.lixinger.com/api/hk/company/mutual-market',
+
+    // A股 融资融券： https://www.lixinger.com/open/api/doc?api-key=cn/company/margin-trading-and-securities-lending
+    CN_COMPANY_MARGIN_TRADING: 'https://open.lixinger.com/api/cn/company/margin-trading-and-securities-lending',
 }
 
 export const MARKET: Record<string, string> = {
@@ -64,6 +72,20 @@ export const COMPANY_FUNDAMENTAL_MARKET_API: Record<string, string> = {
 export const COMPANY_FINANCIAL_STATEMENT_MARKET_API: Record<string, string> = {
     [MARKET['A股']]: COMPANY_API.CN_COMPANY_FINANCIAL_STATEMENT,
     [MARKET['港股']]: COMPANY_API.HK_COMPANY_FINANCIAL_STATEMENT,
+}
+
+export const FUND_FLOW_TYPE = {
+    '互联互通': 'mutual-market',
+    '融资融券': 'margin-trading'
+}
+
+export const COMPANY_MUTUAL_MARKET_API: Record<string, string> = {
+    [MARKET['A股']]: COMPANY_API.CN_COMPANY_MUTUAL_MARKET,
+    [MARKET['港股']]: COMPANY_API.HK_COMPANY_MUTUAL_MARKET,
+}
+
+export const COMPANY_MARGIN_TRADING_API: Record<string, string> = {
+    [MARKET['A股']]: COMPANY_API.CN_COMPANY_MARGIN_TRADING,
 }
 
 // fsTableType 公司类型 

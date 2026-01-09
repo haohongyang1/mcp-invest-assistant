@@ -15,6 +15,28 @@ export interface CompanyFundamentalParam {
     marketCn: string;
     stockCode: string;
     fsTableType: string;
+    metricsList: string[];
+    samplingPeriod?: 'daily' | 'weekly' | 'monthly';
+    includeStatistics?: boolean;
+}
+
+export interface FundamentalStatistics {
+    min: number;
+    max: number;
+    avg: number;
+    latest: number;
+    trend: 'up' | 'down' | 'stable';
+}
+
+export interface FundamentalDataSummary {
+    summary: {
+        dataPoints: number;
+        timeRange: string;
+        samplingMethod: string;
+        metricsCount: number;
+    };
+    statistics: Record<string, FundamentalStatistics>;
+    timeSeries: Array<Record<string, any>>;
 }
 
 export interface CompanyFinancialStatementParam {
@@ -112,7 +134,9 @@ export interface FundamentalInfomation {
     market: string;
     startDate: string;
     endDate: string;
-    metricsList?: string[];
+    metricsList: string[];
+    samplingPeriod?: 'daily' | 'weekly' | 'monthly';
+    includeStatistics?: boolean;
 }
 export interface FundamentalRequestBody {
     token: string;
@@ -165,4 +189,59 @@ export interface FinancialStatementResponseBody {
     code: number;
     message: string;
     data: FinancialStatementResponseData[];
+}
+
+export interface CompanyFundFlowParam {
+    startDate: string;
+    endDate: string;
+    marketCn: string;
+    stockCode: string;
+    fundFlowType: string;
+    limit?: number;
+}
+
+export interface FundFlowInformation {
+    token: string;
+    stockCode: string;
+    market: string;
+    startDate: string;
+    endDate: string;
+    fundFlowType: string;
+    limit?: number;
+}
+
+export interface FundFlowRequestBody {
+    token: string;
+    stockCode: string;
+    startDate: string;
+    endDate: string;
+    limit?: number;
+}
+
+export interface MutualMarketResponseData {
+    date: string;
+    shareholdings: number;
+}
+
+export interface MarginTradingResponseData {
+    date: string;
+    financingPurchaseAmount: number;
+    financingBalance: number;
+    securitiesSellVolume: number;
+    securitiesMargin: number;
+    securitiesBalance: number;
+    financingSecuritiesBalance: number;
+    securitiesSellAmount: number;
+    securitiesRepaymentAmount: number;
+    financingRepaymentAmount: number;
+    financingNetPurchaseAmount: number;
+    securitiesNetSellAmount: number;
+}
+
+export type FundFlowResponseData = MutualMarketResponseData | MarginTradingResponseData;
+
+export interface FundFlowResponseBody {
+    code: number;
+    message: string;
+    data: FundFlowResponseData[];
 }

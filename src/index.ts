@@ -6,6 +6,8 @@ import logger from './utils/logger.js';
 import {registerGetIndexTemperature} from "./tools/getIndexTemperature.js";
 import {registerGetCompanyCandlestick} from "./tools/getCompanyCandlestick.js";
 import {registerGetCompanyFundamental} from "./tools/getCompanyFundamental.js";
+import {registerGetCompanyFinancialStatement} from "./tools/getCompanyFinancialStatement.js";
+import {registerGetCompanyFundFlow} from "./tools/getCompanyFundFlow.js";
 
 import allBaseInfo from './resource/allBaseInfo.js';
 import allCompanyBaseInfo from './resource/allCompanyBaseInfo.js';
@@ -59,8 +61,10 @@ async function startServer() {
         // 公司基本面数据
         registerGetCompanyFundamental(server);
         // 公司财务报表
+        registerGetCompanyFinancialStatement(server);
+        // 公司资金流向
+        registerGetCompanyFundFlow(server);
         // 公司股东人数 & 大股东高管增减持
-        // 资金流向
 
         // 经营数据 & 营收构成
         // 股权质押 & 大宗交易
