@@ -24,10 +24,6 @@ MCP 投资助手是一个专为投资者设计的辅助工具，通过计算指�
 - **>90°**：市场过热，随时有大幅回调风险
 
 ## 它能帮你做什么
-### 快速开始
-TODO 这里录制一个使用视频和投资视频
-
-
 ## 安装与配置
 ### 只需两步获取你自己的理杏仁token
 
@@ -59,10 +55,9 @@ npm install -g mcp-invest-assistant
   }
 }
 ```
-
 > **注意**: 请确保使用 `mcp-invest-assistant` 而非 `npx`。使用全局安装的包可以避免一些连接问题。
 
-3. 如果你仍然看到 `Connection closed` 错误，请尝试以下解决方案：
+1. 如果你仍然看到 `Connection closed` 错误，请尝试以下解决方案：
 
    - 检查你的防火墙设置是否阻止了进程通信
    - 尝试重启你的编辑器或 Claude 客户端
@@ -129,3 +124,19 @@ mcp-invest-assistant/
 └── tsconfig.json        # TypeScript 配置
 ```
 
+## 发布版本：
+1. 保证登录：
+> npm login
+2. 使用命令自动更新，注意三选一，根据版本情况选择
+> npm version patch  # 修复Bug 1.0.2 -> 1.0.3
+> npm version minor  # 新增功能 1.0.2 -> 1.1.0
+> npm version major  # 破坏性更改 1.0.2 -> 2.0.0
+3. 构建项目
+> npm run build
+4. 发布
+> npm publish
+6. 验证发布
+   登录npm查看包
+> https://www.npmjs.com/package/mcp-invest-assistant
+   或者
+> npm show mcp-invest-assistant
